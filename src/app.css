@@ -18,3 +18,15 @@ body {
 .pc-only {
 	@apply hidden md:block;
 }
+
+.mobile-only {
+	@apply block md:hidden;
+}
+
+.button-outline {
+	@apply rounded border border-slate-800 px-1;
+}
+
+.m {
+	@apply m-0.5 md:m-1 lg:m-2;
+}

@@ -5,8 +5,21 @@
 	import '../app.css';
 </script>
 
-<nav class="hidden md:block">header</nav>
+<main class="m">
+	<nav class="pc-only">
+		<a href="/">home</a>
+		<a href="/about">about</a>
+		<a href="/contact">contact</a>
+		<a href="/thoughts">thoughts</a>
+	</nav>
 
-<slot />
+	<nav class="mobile-only">
+		<button class="button-outline">menu</button>
+	</nav>
 
-<nav class="hidden">footer</nav>
+	<slot />
+
+	<nav class="pc-only">footer</nav>
+
+	<nav class="mobile-only">mobile footer</nav>
+</main>
