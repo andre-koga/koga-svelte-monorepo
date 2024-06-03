@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.jet-font,
+body {
+	font-family: 'JetBrains Mono', sans-serif;
+}
+
+.display-font {
+	font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+.text-font {
+	font-family: 'Inter', sans-serif;
+}
+
+.pc-only {
+	@apply hidden md:block;
+}
