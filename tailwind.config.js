@@ -3,6 +3,7 @@ export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
 		extend: {
+			backgroundBlendMode: ['difference'],
 			colors: {},
 			fontFamily: {
 				jet: ['JetBrains Mono', 'sans-serif'],

@@ -8,6 +8,8 @@
 	import '../app.css';
 	import { Menu, X } from 'lucide-svelte';
 	import Footer from '../components/Footer.svelte';
+	import Favicon from '$lib/assets/icon.svg';
+	import WhiteFavicon from '$lib/assets/white-icon.svg';
 
 	let active = false;
 	// Scroller
@@ -18,10 +20,10 @@
 	<!-- <div class="bg-stone-200 relative z-10 text-nowrap -m p scroller">
 		<span>{scrollerText}</span>
 	</div> -->
-	<nav class="fixed -m p gap-4 flex w-screen items-center md:justify-between">
+	<nav class="fixed -m p gap-4 flex w-screen items-center md:justify-between z-10">
 		<button
 			on:click={() => (active = !active)}
-			class="z-20 h-6 w-6 relative md:hidden sidebar-button"
+			class="z-20 h-4 w-4 relative md:hidden sidebar-button"
 		>
 			{#if active}
 				<div class="absolute top-0" transition:blur={{ delay: 0, duration: 200 }}>
@@ -35,7 +37,9 @@
 		</button>
 		<aside class="flex flex-col justify-between" class:active>
 			<div class="flex flex-col gap-2 px-4">
-				<a class="z-10 link text-2xl font-bold rounded-sm font-display" href="/">AK .</a>
+				<a class="z-10 link" href="/">
+					<img src={Favicon} alt="Website's icon" />
+				</a>
 				<p class="font-bold uppercase text-xs mt-4">Pages</p>
 				<div class="flex gap-4">
 					<a class="z-10 link" href="/about">About</a>
@@ -76,7 +80,9 @@
 				<!-- <div class="text-sm text-gray-300">sidebar footer stuff!</div> -->
 			</div>
 		</aside>
-		<a class="z-10 link text-2xl font-bold rounded-sm font-display" href="/">AK .</a>
+		<a class="z-10 link text-2xl font-bold rounded-sm font-display" href="/"
+			><img src={Favicon} alt="Website's icon" /></a
+		>
 		<a class="z-10 link hidden md:block" href="/about">About</a>
 		<a class="z-10 link hidden md:block" href="/contact">Contact</a>
 		<div class="flex-grow bg-gradient-to-r from-stone-100 to-stone-200 z-10 rounded-lg">
@@ -103,7 +109,9 @@
 		</div>
 	</nav>
 
-	<slot />
+	<main class="min-h-screen z-0">
+		<slot />
+	</main>
 
 	<Footer />
 </main>
