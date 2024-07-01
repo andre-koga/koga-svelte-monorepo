@@ -1,9 +1,11 @@
 <script>
+	// @ts-nocheck
+
 	import '@fontsource/bricolage-grotesque/300.css';
 	import { onMount } from 'svelte';
 	import Inner from '$lib/assets/inner.svg';
-	import Rose from '$lib/assets/rose.svg';
-	import Boomerang from '$lib/assets/boomerang.svg';
+	// import Rose from '$lib/assets/rose.svg';
+	// import Boomerang from '$lib/assets/boomerang.svg';
 	// import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 	/**
@@ -13,46 +15,69 @@
 	/**
 	 * @type {gsap.TweenTarget}
 	 */
-	let rose;
-	/**
-	 * @type {gsap.TweenTarget}
-	 */
-	let boomerang;
-	let isSpinning = false;
+	let asciiPre = Array(25).fill(null);
+	let asciiSection;
+	let disableAscii = false;
+	let ascii = [
+		'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*,,,,#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',
+		'@@@@@@@@@@@@@@@@@@@@@@@@@@@@,............,*@@@@@@@@@@@@@@@@@,,...........,,@@@@@',
+		'@@@@@@@@@@@@@@@@@@@@@@@@@%..................(@@@@@@@@@@@@,...................*@@',
+		'@@@@@@@@@@@@@@@@@@@@@@@@,....................(@@@@@@@@@&.......................@',
+		'@@@@@@@@@@@@@@@@@@@@@@%.......................@@@@@@@@@.........................',
+		'@@@@@@@@@@@@@@@@@@@@@,........................@@@@@@@@..........................',
+		'@@@@@@@@@@@@@@@@@@@#..........................@@@@@@@@..........................',
+		'@@@@@@@@@@@@@@@@@@............................@@@@@@@@@.........................',
+		'@@@@@@@@@@@@@@@@(.............................@@@@@@@@@@......................#@',
+		'@@@@@@@@@@@@@@@...............................@@@@@@@@@@@@/................./@@@',
+		'@@@@@@@@@@@@@(................................@@@@@@@@@@@@@@@@*.........,@@@@@@@',
+		'@@@@@@@@@@@@..................................@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',
+		'@@@@@@@@@@,...................................@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',
+		'@@@@@@@@@.....................................@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',
+		'@@@@@@@,......................................@@@@@@@@@@@@@@@@@/,,,,,,,/@@@@@@@@',
+		'@@@@@&........................................@@@@@@@@@@@@@,...............,@@@@',
+		'@@@@,.........................................@@@@@@@@@@&.....................@@',
+		'@@@...........................................@@@@@@@@@........................(',
+		'@,............................................@@@@@@@@@.........................',
+		'..............................................@@@@@@@@..........................',
+		'..............................................@@@@@@@@@.........................',
+		'@............................................(@@@@@@@@@(.......................%',
+		'@@..........................................@@@@@@@@@@@@@.....................@@',
+		'@@@@......................................@@@@@@@@@@@@@@@@@(...............@@@@@'
+	];
+	let gradient = ['black'];
 
 	// onMount(() => {
 	// 	gsap.from(h1, { duration: 1, y: -100, autoAlpha: 0 });
 	// 	gsap.to(h1, { duration: 1, y: 0, autoAlpha: 1 });
 	// });
 	onMount(() => {
+		for (let i = 0; i < ascii.length; i++) {
+			gsap.from(asciiPre[i], {
+				delay: 1 + (2 * i) / ascii.length,
+				duration: 0.5 + i / ascii.length,
+				color: gradient[i % gradient.length]
+			});
+			gsap.to(asciiPre[i], {
+				delay: 1 + (2 * i) / ascii.length,
+				duration: 0.5 + i / ascii.length,
+				text: ascii[i],
+				color: 'white'
+			});
+		}
 		gsap.to(h1, {
 			opacity: 1,
-			zIndex: 5
+			zIndex: 5,
+			duration: 1
 		});
-		window.addEventListener('mousemove', (e) => {
-			gsap.to(h1, {
-				duration: 0.5,
-				x: (e.clientX - window.innerWidth / 2) * 0.05,
-				y: (e.clientY - window.innerHeight / 2) * 0.05,
-				rotate: (e.clientX - window.innerWidth / 2) * 0.005,
-				opacity: 1
+		gsap
+			.to(asciiSection, {
+				delay: 5,
+				opacity: 0,
+				duration: 0.5
+			})
+			.onComplete(() => {
+				disableAscii = true;
 			});
-			gsap.to(rose, {
-				duration: 0.5,
-				x: (e.clientX - window.innerWidth / 2) * 0.1,
-				y: (e.clientY - window.innerHeight / 2) * 0.05,
-				rotate: ((e.clientX + e.clientY) / 2) * 0.05,
-				scale: 1 + (e.clientY - window.innerHeight / 2) / window.innerHeight,
-				opacity: 1
-			});
-			gsap.to(boomerang, {
-				duration: 0.5,
-				x: (e.clientX - window.innerWidth / 2) * 0.15,
-				y: (e.clientY - window.innerHeight / 2) * 0.05,
-				rotate: ((e.clientX + e.clientY) / 2) * 0.2,
-				opacity: 1
-			});
-		});
 	});
 
 	// Draggable.create('.boomerang', {
@@ -61,13 +86,30 @@
 	// });
 </script>
 
-<section class="relative flex min-h-screen flex-col items-center place-content-center">
+<section
+	bind:this={asciiSection}
+	class="fixed -m min-h-screen w-screen l-0 t-0 bg-black text-white z-20 flex flex-col place-content-center items-center"
+	style:pointer-events={disableAscii ? 'auto' : 'none'}
+>
+	<div class="m-2 text-center text-gray-500">
+		<p class="text-sm sm:text-base">for every question there are many answers,</p>
+		<br />
+		{#each ascii as line, i}
+			<pre bind:this={asciiPre[i]} class="text-white text-[1.7vmin]"></pre>
+		{/each}
+		<br />
+		<p class="text-sm sm:text-base">for every answer there are even more questions</p>
+		<br />
+	</div>
+</section>
+
+<section class="relative flex min-h-screen flex-col place-content-center items-center">
 	<img
 		class="absolute right-1/2 bottom-1/2 translate-x-1/2 translate-y-1/2 h-[50vh] aspect-square"
 		src={Inner}
 		alt="Inner icon"
 	/>
-	<img
+	<!-- <img
 		class="z-[6] absolute right-[20%] bottom-[25%] translate-x-1/2 translate-y-1/2"
 		bind:this={rose}
 		src={Rose}
@@ -78,17 +120,17 @@
 		bind:this={boomerang}
 		src={Boomerang}
 		alt="Boomerang decor"
-	/>
+	/> -->
 	<h1
 		bind:this={h1}
-		class="display-font md:font-light text-[32vw] text-center leading-[0.9] md:leading-normal md:text-[16vw] md:text-nowrap m-16 opacity-0"
+		class="display-font md:font-light text-[16vw] mx-[4vw] text-center leading-[0.9] md:leading-normal md:text-[16vw] md:text-nowrap opacity-0"
 	>
 		Andre Koga
 	</h1>
 </section>
 <section class="min-h-screen"></section>
 
-<style>
+<!-- <style>
 	.hidden-text {
 		visibility: hidden;
 		opacity: 0;
@@ -103,4 +145,4 @@
 			opacity 0.5s,
 			visibility 0.5s;
 	}
-</style>
+</style> -->
